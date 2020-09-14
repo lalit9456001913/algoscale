@@ -65,10 +65,14 @@ app.post('/auth',async(req,res)=>{
 app.post('/user',async(req,res)=>{
    
     const recent_id = await User.find().sort({ _id: -1 }).limit(1)
-    const next_id = recent_id ? recent_id.user_id + 1 : 1; 
-    
-    const obj=new User();
-    obj.user_id= 2;
+    var next_id = 1;
+    if(recent_id.length > 0){
+      console.log("this is inside");
+      console.log(recent_id);
+      next_id = recent_id[0].user_id + 1; 
+    }
+    var obj=new User();
+    obj.user_id= next_id;
     obj.username=req.body.username;
     obj.email=req.body.email;
     obj.password=req.body.password;
