@@ -15,11 +15,11 @@ const path = require('path');
 const app = express();
 const session = require('express-session')
 app.use(express.json());
+
 //initialize session
+
 app.use(session({
     secret: 'abcdef',
-    
-  //  store: sessionStore.createSessionStore(), // connect-mongo session store
     proxy: true,
     resave: true,
     saveUninitialized: true,
@@ -39,7 +39,6 @@ const User=mongoose.model('User')
 const Login=mongoose.model('login_Model')
 
 app.post('/auth',async(req,res)=>{
-    
   var u_username = req.body.username;
   var u_password = req.body.password;
 
@@ -63,12 +62,9 @@ app.post('/auth',async(req,res)=>{
 
 //user creation
 app.post('/user',async(req,res)=>{
-   
     const recent_id = await User.find().sort({ _id: -1 }).limit(1)
     var next_id = 1;
     if(recent_id.length > 0){
-      console.log("this is inside");
-      console.log(recent_id);
       next_id = recent_id[0].user_id + 1; 
     }
     var obj=new User();
@@ -77,18 +73,15 @@ app.post('/user',async(req,res)=>{
     obj.email=req.body.email;
     obj.password=req.body.password;
     obj.confirm_password=req.body.confirm_password;
-
     obj.save()
     res.sendStatus(200)
 })
 
 
 app.post('/delete',async(req,res)=>{
- 
   var removeQuery = User.deleteOne({user_id : req.body.user_id});
-  removeQuery.exec();
-  
-  
+  removeQuery.exec()
+  res.sendStatus(200)
 })
 
 app.get('/get_session',async(req,res)=> {
@@ -101,7 +94,6 @@ app.get('/get_session',async(req,res)=> {
 })
 
 app.get('/user',async(req,res)=>{
-  
   const user = await User.find({})
   res.send(user)
 })
