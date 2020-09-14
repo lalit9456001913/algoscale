@@ -53,10 +53,10 @@ app.post('/auth',async(req,res)=>{
                    
             if (!req.session.username){
                    req.session.username=req.body.username 
-                   
+            
             }
-             console.log('req.session is this :'+ req.session.username) 
-            res.sendStatus(200)
+             
+           res.sendStatus(200)
         }
    })
 
@@ -68,7 +68,7 @@ app.post('/user',async(req,res)=>{
     const next_id = recent_id ? recent_id.user_id + 1 : 1; 
     
     const obj=new User();
-    obj.user_id= next_id;
+    obj.user_id= 2;
     obj.username=req.body.username;
     obj.email=req.body.email;
     obj.password=req.body.password;
@@ -84,7 +84,7 @@ app.post('/delete',async(req,res)=>{
   var removeQuery = User.deleteOne({user_id : req.body.user_id});
   removeQuery.exec();
   
-  console.log(user)
+  
 })
 
 app.get('/get_session',async(req,res)=> {
@@ -100,4 +100,25 @@ app.get('/user',async(req,res)=>{
   
   const user = await User.find({})
   res.send(user)
+})
+
+
+app.get('/Logout',async(req,res)=>{
+  console.log('got logout')
+ const sess=req.session;
+    var data = {
+        "Data":""
+    };
+    
+    sess.destroy(function(err) {
+        if(err){
+         
+            data["Data"] = 'Error destroying session';
+            res.json(data);
+        }else{
+        
+            data["Data"] = 'Session destroy successfully';
+            res.json(data);
+         }
+    });
 })
